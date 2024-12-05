@@ -1,6 +1,8 @@
 import { env } from '@/lib/env';
 
 export interface RegisterPayload {
+  firstname: string;
+  lastname: string;
   email: string;
   password: string;
   promoCode: string;
@@ -18,6 +20,8 @@ export const register = async (data: RegisterPayload): Promise<RegisterResponse>
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
+      firstname: data.firstname,
+      lastname: data.lastname,
       email: data.email,
       password: data.password,
       stripe_promo_code: data.promoCode,

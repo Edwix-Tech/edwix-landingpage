@@ -1,21 +1,20 @@
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
 import './globals.css';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { ReactQueryProvider } from '@/components/react-query-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
+import { Lora, Hanken_Grotesk } from 'next/font/google';
 
-const geistSans = localFont({
-  src: '../fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-  weight: '100 900',
+const lora = Lora({
+  subsets: ['latin'],
+  variable: '--font-lora',
 });
-const geistMono = localFont({
-  src: '../fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
-  weight: '100 900',
+
+const hankenGrotesk = Hanken_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-hanken-grotesk',
 });
 
 export const metadata: Metadata = {
@@ -36,7 +35,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${lora.className} ${hankenGrotesk.variable} antialiased`}>
         <ReactQueryProvider>
           <NextIntlClientProvider messages={messages}>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
