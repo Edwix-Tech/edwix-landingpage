@@ -1,21 +1,6 @@
 {
   "actions": {
-    "login": "Login",
-    "logout": "Logout",
-    "openSettings": "Open settings",
-    "add": "Add"
-  },
-  "auth": {
-    "signInTitle": "Sign in to your account",
-    "emailLabel": "Email address",
-    "emailPlaceholder": "Email address",
-    "emailRequired": "Email is required",
-    "emailInvalid": "Invalid email address",
-    "passwordLabel": "Password",
-    "passwordPlaceholder": "Password",
-    "passwordRequired": "Password is required",
-    "passwordMinLength": "Password must be at least 6 characters",
-    "signingIn": "Signing in..."
+    "openSettings": "Open settings"
   },
   "home": {
     "welcome": "Welcome back, {email}",
@@ -23,11 +8,6 @@
   },
   "common": {
     "logo": "Logo"
-  },
-  "navigation": {
-    "home": "Home",
-    "mainMenu": "Main menu",
-    "todos": "Todos"
   },
   "settings": {
     "title": "Settings",
@@ -42,11 +22,5 @@
       "label": "Language",
       "placeholder": "Select language"
     }
-  },
-  "todos": {
-    "title": "Todos",
-    "newTodoPlaceholder": "Add a new todo...",
-    "noTodos": "No todos yet",
-    "showAll": "Show all"
   }
 }

@@ -1,9 +1,6 @@
 {
   "actions": {
-    "login": "Connexion",
-    "logout": "Déconnexion",
-    "openSettings": "Ouvrir les paramètres",
-    "add": "Ajouter"
+    "openSettings": "Ouvrir les paramètres"
   },
   "home": {
     "welcome": "Bienvenue, {email}",
@@ -11,11 +8,6 @@
   },
   "common": {
     "logo": "Logo"
-  },
-  "navigation": {
-    "home": "Accueil",
-    "mainMenu": "Menu principal",
-    "todos": "Tâches"
   },
   "settings": {
     "title": "Paramètres",
@@ -30,23 +22,5 @@
       "label": "Langue",
       "placeholder": "Sélectionner une langue"
     }
-  },
-  "auth": {
-    "signInTitle": "Connectez-vous à votre compte",
-    "emailLabel": "Adresse e-mail",
-    "emailPlaceholder": "Adresse e-mail",
-    "emailRequired": "L'email est requis",
-    "emailInvalid": "Adresse e-mail invalide",
-    "passwordLabel": "Mot de passe",
-    "passwordPlaceholder": "Mot de passe",
-    "passwordRequired": "Le mot de passe est requis",
-    "passwordMinLength": "Le mot de passe doit contenir au moins 6 caractères",
-    "signingIn": "Connexion en cours..."
-  },
-  "todos": {
-    "title": "Tâches",
-    "newTodoPlaceholder": "Ajouter une nouvelle tâche...",
-    "noTodos": "Aucune tâche pour le moment",
-    "showAll": "Afficher tout"
   }
 }
