@@ -1,36 +1,129 @@
 'use client';
 
 import * as React from 'react';
-import { useTranslations } from 'next-intl';
-import { SettingsModal } from '@/components/settings-modal';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { useMutation } from '@tanstack/react-query';
+import { useToast } from '@/hooks/use-toast';
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { register } from '@/lib/api/mutations';
+import type { RegisterPayload } from '@/lib/api/mutations';
+import { env } from '@/lib/env';
+import mustache from 'mustache';
+
+const formSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  promoCode: z.string(),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 export default function HomePage() {
-  const t = useTranslations('home');
-  const [showSettings, setShowSettings] = React.useState(false);
+  const { toast } = useToast();
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      promoCode: '',
+    },
+  });
+
+  const registerMutation = useMutation({
+    mutationFn: (data: RegisterPayload) => register(data),
+    onSuccess: data => {
+      toast({
+        title: 'Success',
+        description: 'Registration successful',
+      });
+
+      const redirectUrl = new URL(mustache.render(env().REDIRECT_URL, { token: data.accessToken }));
+      window.location.href = redirectUrl.toString();
+    },
+    onError: error => {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const onSubmit = (data: FormValues) => {
+    registerMutation.mutate(data);
+  };
 
   return (
-    <main className="flex-1 flex flex-col">
-      <div className="flex-1 px-4 py-2">
-        <div className="flex-1 container mx-auto">
-          <div className="container py-8">
-            <div className="flex flex-col gap-1">
-              <h1 className="relative text-3xl font-bold tracking-tighter sm:text-4xl">
-                <span>
-                  {t('welcome', {
-                    email: 'john.doe@example.com',
-                  })}
-                </span>
-              </h1>
-              <p className="text-muted-foreground">{t('description')}</p>
+    <main className="flex min-h-screen items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold">Sign In</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter your email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              <Button onClick={() => setShowSettings(true)}>Settings</Button>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" placeholder="Enter your password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              <SettingsModal open={showSettings} onOpenChange={setShowSettings} />
-            </div>
-          </div>
-        </div>
-      </div>
+              <FormField
+                control={form.control}
+                name="promoCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Promo Code (Optional)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter promo code" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button type="submit" className="w-full" disabled={registerMutation.isPending}>
+                {registerMutation.isPending ? 'Signing in...' : 'Sign in'}
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </main>
   );
 }
