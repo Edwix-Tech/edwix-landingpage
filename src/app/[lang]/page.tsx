@@ -398,7 +398,7 @@ export default function HomePage() {
                 src="/images/hero-illustration.svg"
                 alt="Edwix"
                 className=""
-                width={typeof window === 'undefined' ? 500 : window.innerWidth}
+                width={500}
                 height={100}
               />
             </div>
