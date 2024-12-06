@@ -22,5 +22,97 @@
       "label": "Langue",
       "placeholder": "Sélectionner une langue"
     }
+  },
+  "landing": {
+    "promoHeader": "Vous avez un code promo ? Utilisez-le maintenant !",
+    "mainBadge": "Votre application tout-en-un de gestion de maison",
+    "mainTitle": {
+      "prefix": "Dites adieu",
+      "content": "aux factures en retard, aux problèmes sous-jacents et aux dépenses croissantes"
+    },
+    "buttons": {
+      "caseStudies": "Études de cas",
+      "getFreeYear": "Obtenir mon année gratuite"
+    },
+    "rating": {
+      "prefix": "Noté",
+      "suffix": "par plus de 1000+"
+    },
+    "users": {
+      "prefix": "Des milliers",
+      "content": "d'utilisateurs ont choisi Edwix pour gérer leur maison"
+    },
+    "form": {
+      "badge": "Vous êtes éligible pour obtenir une année gratuite",
+      "title": {
+        "prefix": "Dites bonjour",
+        "content": "à une année gratuite de... tranquillité d'esprit"
+      },
+      "fields": {
+        "firstname": {
+          "label": "Prénom",
+          "placeholder": "Entrez votre prénom"
+        },
+        "lastname": {
+          "label": "Nom",
+          "placeholder": "Entrez votre nom"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Entrez votre email"
+        },
+        "password": {
+          "label": "Mot de passe",
+          "placeholder": "Entrez votre mot de passe"
+        },
+        "promoCode": {
+          "label": "Code promo",
+          "placeholder": "Entrez le code promo"
+        }
+      },
+      "submit": {
+        "loading": "Inscription en cours...",
+        "default": "Inscription"
+      }
+    },
+    "features": {
+      "badge": "Fonctionnalités et avantages",
+      "title": {
+        "prefix": "Nous vous aidons à",
+        "highlight": "protéger",
+        "suffix": "le plus grand investissement de votre vie"
+      },
+      "expenseTracker": {
+        "title": "Suivi des dépenses",
+        "description": "Automatisez le suivi de toutes vos dépenses"
+      },
+      "alerts": {
+        "title": "Alertes intelligentes",
+        "description": "Soyez notifié de toute variation de prix ou échéance"
+      },
+      "goEmail": {
+        "title": "GoEmail",
+        "description": "Automatisez la gestion de toutes vos factures"
+      },
+      "vault": {
+        "title": "Coffre-fort numérique",
+        "description": "Sécurisez vos documents sur un serveur cloud"
+      },
+      "calendar": {
+        "title": "Synchronisation calendrier",
+        "description": "Synchronisez vos échéances avec votre calendrier personnel"
+      }
+    },
+    "testimonials": {
+      "nathalie": {
+        "quote": "La fonction GoEmail a sauvé ma boîte de réception d'être surchargée et a aussi organisé mes factures sous un même toit",
+        "explanation": "GoEmail est l'une des fonctionnalités principales d'Edwix, contournant votre boîte de réception et synchronisant automatiquement toutes vos factures dans Edwix !"
+      },
+      "christian": {
+        "quote": "J'ai découvert que je payais trop d'électricité grâce au suivi des dépenses, et j'ai trouvé des problèmes électriques qui auraient pu être coûteux s'ils n'avaient pas été réparés",
+        "explanation": "Le suivi des dépenses est un outil complet pour catégoriser, suivre vos différentes dépenses et vous notifier de tout changement."
+      },
+      "userSince": "Utilisateur depuis {date}"
+    }
   }
 }

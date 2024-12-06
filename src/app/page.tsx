@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslations } from 'next-intl';
 
 import {
   Form,
@@ -25,6 +26,7 @@ import mustache from 'mustache';
 import { Bell, DollarSign, Mail, Lock, Calendar, Star, Sparkle } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+// import { SettingsModal } from '@/components/settings-modal';
 import Link from 'next/link';
 
 const formSchema = z.object({
@@ -39,6 +41,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 function HomePageForm() {
   const { toast } = useToast();
+  const t = useTranslations('landing');
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -74,20 +77,16 @@ function HomePageForm() {
     registerMutation.mutate(data);
   };
 
-  const renderFieldText = (opts: {
-    label: string;
-    placeholder: string;
-    name: keyof FormValues;
-  }) => (
+  const renderFieldText = (opts: { name: keyof FormValues }) => (
     <FormField
       control={form.control}
       name={opts.name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="font-bold">{opts.label}</FormLabel>
+          <FormLabel className="font-bold">{t(`form.fields.${opts.name}.label`)}</FormLabel>
           <FormControl>
             <Input
-              placeholder={opts.placeholder}
+              placeholder={t(`form.fields.${opts.name}.placeholder`)}
               {...field}
               className="bg-white border-2 border-black rounded-full h-10 font-hanken-grotesk text-sm"
             />
@@ -103,32 +102,22 @@ function HomePageForm() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {renderFieldText({
-            label: 'First name',
-            placeholder: 'Enter your first name',
             name: 'firstname',
           })}
 
           {renderFieldText({
-            label: 'Last name',
-            placeholder: 'Enter your last name',
             name: 'lastname',
           })}
 
           {renderFieldText({
-            label: 'Email',
-            placeholder: 'Enter your email',
             name: 'email',
           })}
 
           {renderFieldText({
-            label: 'Password',
-            placeholder: 'Enter your password',
             name: 'password',
           })}
 
           {renderFieldText({
-            label: 'Promo Code',
-            placeholder: 'Enter promo code',
             name: 'promoCode',
           })}
 
@@ -140,7 +129,7 @@ function HomePageForm() {
             className="w-full uppercase rounded-full border-2 border-black text-inverse font-bold font-hanken-grotesk shadow-plain hover:shadow-none transition-all"
             disabled={registerMutation.isPending}
           >
-            {registerMutation.isPending ? 'Inscription en cours ...' : 'Inscription'}
+            {registerMutation.isPending ? t('form.submit.loading') : t('form.submit.default')}
           </Button>
         </form>
       </Form>
@@ -155,31 +144,32 @@ type FeatureItem = {
 };
 
 function HomePageFeatures() {
+  const t = useTranslations('landing');
   const features: FeatureItem[] = [
     {
       icon: <DollarSign />,
-      title: 'Expense tracker',
-      description: 'Automate the tracking of all of your expenses',
+      title: t('features.expenseTracker.title'),
+      description: t('features.expenseTracker.description'),
     },
     {
       icon: <Bell />,
-      title: 'Intelligent alerts',
-      description: 'Get notified of any price variation or due dates',
+      title: t('features.alerts.title'),
+      description: t('features.alerts.description'),
     },
     {
       icon: <Mail />,
-      title: 'GoEmail',
-      description: 'Automate the management of all your invoices',
+      title: t('features.goEmail.title'),
+      description: t('features.goEmail.description'),
     },
     {
       icon: <Lock />,
-      title: 'Document vault',
-      description: 'Secure your documents on a cloud-base server',
+      title: t('features.vault.title'),
+      description: t('features.vault.description'),
     },
     {
       icon: <Calendar />,
-      title: 'Calendar sync',
-      description: 'Sync your due dates with your personal calendar',
+      title: t('features.calendar.title'),
+      description: t('features.calendar.description'),
     },
   ];
 
@@ -212,26 +202,23 @@ type TestimonialItem = {
 };
 
 function HomePageTestimonials() {
+  const t = useTranslations('landing');
   const testimonials: TestimonialItem[] = [
     {
       name: 'Nathalie',
       city: 'Québec',
       since: new Date('2023-01-01'),
-      quote:
-        'The GoEmail feature saved my inbox from being overflooded and also organised my bills under one roof',
+      quote: t('testimonials.nathalie.quote'),
       imagePath: '/images/testimonials/1.jpg',
-      explanation:
-        'GoEmail is one of the core features of Edwix, skipping your inbox and synchronizing all your bills in Edwix, automatically!',
+      explanation: t('testimonials.nathalie.explanation'),
     },
     {
       name: 'Christian',
       city: 'Laval',
       since: new Date('2023-01-01'),
-      quote:
-        'I learned that I was paying too much electricity with the expense tracker, found out I had electrical problems that could’ve been costly if unfixed',
+      quote: t('testimonials.christian.quote'),
       imagePath: '/images/testimonials/2.jpg',
-      explanation:
-        'The Expense Tracker is a complete tool to categorise, track your different expenses and notify you of any changes.',
+      explanation: t('testimonials.christian.explanation'),
     },
   ];
 
@@ -252,14 +239,12 @@ function HomePageTestimonials() {
                 {testimonial.name}, {testimonial.city}
               </h3>
               <p className="text-xs font-hanken-grotesk">
-                User since {testimonial.since.toLocaleDateString()}
+                {t('testimonials.userSince', { date: testimonial.since.toLocaleDateString() })}
               </p>
             </div>
           </div>
           <p className="text-xl text-center font-medium">
-            ‘’{'  '}
-            {testimonial.quote}
-            {'  '}’’
+            &ldquo;{`  ${testimonial.quote}  `}&rdquo;
           </p>
           <p className="text-xs font-hanken-grotesk text-muted-foreground">
             *{testimonial.explanation}
@@ -284,6 +269,7 @@ function HomePageBadge(opts: { children: React.ReactNode; className?: string }) 
 }
 
 export default function HomePage() {
+  const t = useTranslations('landing');
   // const [showSettings, setShowSettings] = React.useState(false);
   const formContainerRef = React.useRef<HTMLDivElement>(null);
 
@@ -300,7 +286,7 @@ export default function HomePage() {
         onClick={_scrollToForm}
       >
         <div className="container text-center font-hanken-grotesk text-sm">
-          You have a promo code? Redeem it right now!
+          {t('promoHeader')}
           {/* <Button onClick={() => setShowSettings(true)}>Settings</Button> */}
           {/* <SettingsModal open={showSettings} onOpenChange={setShowSettings} /> */}
         </div>
@@ -327,12 +313,12 @@ export default function HomePage() {
               <Image src="/images/logo-white.svg" alt="Edwix" width={200} height={100} />
             </div>
             <div className="flex justify-center">
-              <HomePageBadge>Your all in one home management app</HomePageBadge>
+              <HomePageBadge>{t('mainBadge')}</HomePageBadge>
             </div>
 
             <h2 className="text-2xl mx-6 text-center font-medium">
-              <strong className="font-medium text-primary">Say goodbye</strong> to past due bills,
-              underlying problems and growing home expenses
+              <strong className="font-medium text-primary">{t('mainTitle.prefix')}</strong>{' '}
+              {t('mainTitle.content')}
             </h2>
 
             <div className="flex items-center gap-3 py-4">
@@ -341,7 +327,7 @@ export default function HomePage() {
                   size="lg"
                   className="rounded-full font-hanken-grotesk border-2 border-black text-black h-12 shadow-plain hover:shadow-none transition-all"
                 >
-                  Case studies
+                  {t('buttons.caseStudies')}
                 </Button>
               </Link>
               <Button
@@ -349,7 +335,7 @@ export default function HomePage() {
                 className="rounded-full font-hanken-grotesk border-2 border-black text-black h-12 shadow-plain bg-white hover:bg-foreground hover:shadow-none transition-all"
                 onClick={_scrollToForm}
               >
-                Get my 1 free year
+                {t('buttons.getFreeYear')}
               </Button>
             </div>
 
@@ -369,7 +355,7 @@ export default function HomePage() {
           <div className="py-4 flex flex-col gap-4">
             <div className="flex justify-center">
               <HomePageBadge className="text-black">
-                Rated
+                {t('rating.prefix')}
                 <span className="inline-flex items-center -space-x-2.5">
                   <Star className="h-3" fill="currentColor" />
                   <Star className="h-3" fill="currentColor" />
@@ -377,13 +363,13 @@ export default function HomePage() {
                   <Star className="h-3" fill="currentColor" />
                   <Star className="h-3" fill="currentColor" />
                 </span>
-                by more than 1000+
+                {t('rating.suffix')}
               </HomePageBadge>
             </div>
 
             <h2 className="text-2xl mx-6 text-center text-black font-medium">
-              <strong className="font-medium text-primary">Thousands</strong> of users chose Edwix
-              to manage their homes
+              <strong className="font-medium text-primary">{t('users.prefix')}</strong>{' '}
+              {t('users.content')}
             </h2>
 
             <HomePageTestimonials />
@@ -391,12 +377,13 @@ export default function HomePage() {
 
           <div className="py-4 flex flex-col gap-4">
             <div className="flex justify-center">
-              <HomePageBadge className="text-black">Features and benefits</HomePageBadge>
+              <HomePageBadge className="text-black">{t('features.badge')}</HomePageBadge>
             </div>
 
             <h2 className="text-2xl mx-6 text-center text-black font-medium">
-              We help you <strong className="font-medium text-primary">protect</strong> the biggest
-              investment of your life
+              {t('features.title.prefix')}{' '}
+              <strong className="font-medium text-primary">{t('features.title.highlight')}</strong>{' '}
+              {t('features.title.suffix')}
             </h2>
 
             <HomePageFeatures />
@@ -417,12 +404,12 @@ export default function HomePage() {
 
           <div className="flex flex-col gap-4 z-10">
             <div className="flex justify-center">
-              <HomePageBadge>You are eligible to get one free year</HomePageBadge>
+              <HomePageBadge>{t('form.badge')}</HomePageBadge>
             </div>
 
             <h2 className="text-2xl mx-6 text-center font-medium">
-              <strong className="font-medium text-primary">Say hello</strong> to one free year of
-              ... peace of mind
+              <strong className="font-medium text-primary">{t('form.title.prefix')}</strong>{' '}
+              {t('form.title.content')}
             </h2>
 
             <div className="p-4">
