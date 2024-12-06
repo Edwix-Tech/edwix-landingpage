@@ -62,11 +62,18 @@ const formSchema = (t: (key: string) => string) =>
 
 type FormValues = z.infer<ReturnType<typeof formSchema>>;
 
-function PasswordRequirements({ password }: { password: string }) {
+function PasswordRequirements({
+  password,
+  confirmPassword,
+}: {
+  password: string;
+  confirmPassword: string;
+}) {
   const t = useTranslations('landing');
   const hasMinLength = password.length >= 6;
   const hasNumber = /[0-9]/.test(password);
   const hasLetter = /[a-zA-Z]/.test(password);
+  const passwordsMatch = password === confirmPassword && password.length > 0;
 
   const requirementStyle = (met: boolean) =>
     cn('flex items-center gap-2 text-xs', met ? 'text-primary' : 'text-red-600');
@@ -75,7 +82,7 @@ function PasswordRequirements({ password }: { password: string }) {
   const iconX = <X className="w-4 h-4" />;
 
   return (
-    <div className="flex w-full justify-center gap-4 px-2 mt-1 font-medium">
+    <div className="flex w-full justify-center gap-4 px-2 mt-1 font-medium flex-wrap">
       <div className={requirementStyle(hasMinLength)}>
         {hasMinLength ? iconCheck : iconX} {t('validation.passwordRequirements.minLength')}
       </div>
@@ -84,6 +91,9 @@ function PasswordRequirements({ password }: { password: string }) {
       </div>
       <div className={requirementStyle(hasLetter)}>
         {hasLetter ? iconCheck : iconX} {t('validation.passwordRequirements.letter')}
+      </div>
+      <div className={requirementStyle(passwordsMatch)}>
+        {passwordsMatch ? iconCheck : iconX} {t('validation.passwordRequirements.match')}
       </div>
     </div>
   );
@@ -112,6 +122,7 @@ function HomePageForm() {
     mutationFn: (data: RegisterPayload) => register(data),
     onSuccess: () => {
       setShowConfirmation(true);
+      form.reset();
     },
     onError: error => {
       toast({
@@ -187,7 +198,10 @@ function HomePageForm() {
             </div>
           </FormControl>
           {opts.name === 'confirmPassword' && (
-            <PasswordRequirements password={form.watch('password')} />
+            <PasswordRequirements
+              password={form.watch('password')}
+              confirmPassword={form.watch('confirmPassword')}
+            />
           )}
           {!opts.hideMessage && <FormMessage className="font-medium text-center text-red-600" />}
         </FormItem>

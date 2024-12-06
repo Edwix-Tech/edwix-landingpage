@@ -141,7 +141,8 @@
       "passwordRequirements": {
         "minLength": "Au moins 6 caractères",
         "number": "Au moins 1 numéro",
-        "letter": "Au moins 1 lettre"
+        "letter": "Au moins 1 lettre",
+        "match": "Les mots de passe correspondent"
       }
     },
     "confirmation": {
