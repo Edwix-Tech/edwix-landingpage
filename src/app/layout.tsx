@@ -38,7 +38,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={`${lora.className} ${hankenGrotesk.variable} antialiased`}>
+      <body className={`${lora.className} ${hankenGrotesk.variable} antialiased bg-secondary`}>
         <ReactQueryProvider>
           <NextIntlClientProvider messages={messages} locale={lang}>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

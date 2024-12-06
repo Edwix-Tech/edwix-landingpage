@@ -21,11 +21,18 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { register } from '@/lib/api/mutations';
 import type { RegisterPayload } from '@/lib/api/mutations';
-import { env } from '@/lib/env';
 import { Bell, DollarSign, Mail, Lock, Calendar, Star, Sparkle, Check, X } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
 
 const formSchema = (t: (key: string) => string) =>
   z.object({
@@ -85,6 +92,8 @@ function HomePageForm() {
     },
   });
 
+  const [showConfirmation, setShowConfirmation] = React.useState(false);
+
   const registerMutation = useMutation({
     mutationFn: (data: RegisterPayload) => register(data),
     onSuccess: () => {
@@ -92,8 +101,7 @@ function HomePageForm() {
         title: 'Success',
         description: 'Registration successful',
       });
-
-      window.location.href = env().REDIRECT_URL;
+      setShowConfirmation(true);
     },
     onError: error => {
       toast({
@@ -147,6 +155,22 @@ function HomePageForm() {
     />
   );
 
+  const confirmationDialog = (
+    <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
+      <DialogContent className="sm:max-w-[425px] text-black">
+        <DialogHeader>
+          <DialogTitle>{t('confirmation.title')}</DialogTitle>
+          <DialogDescription>{t('confirmation.description')}</DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button variant="ghost" type="submit" onClick={() => setShowConfirmation(false)}>
+            {t('confirmation.close')}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+
   return (
     <Card className="p-6 bg-foreground border-2 border-black shadow-plain-lg">
       <Form {...form}>
@@ -190,6 +214,7 @@ function HomePageForm() {
           </Button>
         </form>
       </Form>
+      {confirmationDialog}
     </Card>
   );
 }

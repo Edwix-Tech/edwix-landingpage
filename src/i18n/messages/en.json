@@ -143,6 +143,11 @@
         "number": "At least 1 number",
         "letter": "At least 1 letter"
       }
+    },
+    "confirmation": {
+      "title": "Confirmation",
+      "description": "Your registration is successful. A confirmation email has been sent to your inbox. Please click the link in the email to activate your account.",
+      "close": "Close"
     }
   }
 }
