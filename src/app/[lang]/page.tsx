@@ -23,31 +23,65 @@ import { register } from '@/lib/api/mutations';
 import type { RegisterPayload } from '@/lib/api/mutations';
 import { env } from '@/lib/env';
 import mustache from 'mustache';
-import { Bell, DollarSign, Mail, Lock, Calendar, Star, Sparkle } from 'lucide-react';
+import { Bell, DollarSign, Mail, Lock, Calendar, Star, Sparkle, Check, X } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
-const formSchema = z.object({
-  firstname: z.string().min(1, 'First name is required'),
-  lastname: z.string().min(1, 'Last name is required'),
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  promoCode: z.string().min(1, 'Promo code is required'),
-});
+const formSchema = (t: (key: string) => string) =>
+  z.object({
+    firstname: z.string().min(1, t('validation.firstname.required')),
+    lastname: z.string().min(1, t('validation.lastname.required')),
+    email: z.string().email(t('validation.email.invalid')),
+    password: z.string(),
+    confirmPassword: z
+      .string()
+      .min(6, t('validation.password.minLength'))
+      .regex(/[0-9]/, t('validation.password.requireNumber'))
+      .regex(/[a-zA-Z]/, t('validation.password.requireLetter')),
+    promoCode: z.string().min(1, t('validation.promoCode.required')),
+  });
 
-type FormValues = z.infer<typeof formSchema>;
+type FormValues = z.infer<ReturnType<typeof formSchema>>;
+
+function PasswordRequirements({ password }: { password: string }) {
+  const t = useTranslations('landing');
+  const hasMinLength = password.length >= 6;
+  const hasNumber = /[0-9]/.test(password);
+  const hasLetter = /[a-zA-Z]/.test(password);
+
+  const requirementStyle = (met: boolean) =>
+    cn('flex items-center gap-2 text-xs', met ? 'text-primary' : 'text-red-600');
+
+  const iconCheck = <Check className="w-4 h-4" />;
+  const iconX = <X className="w-4 h-4" />;
+
+  return (
+    <div className="flex w-full justify-center gap-4 px-2 mt-1 font-medium">
+      <div className={requirementStyle(hasMinLength)}>
+        {hasMinLength ? iconCheck : iconX} {t('validation.passwordRequirements.minLength')}
+      </div>
+      <div className={requirementStyle(hasNumber)}>
+        {hasNumber ? iconCheck : iconX} {t('validation.passwordRequirements.number')}
+      </div>
+      <div className={requirementStyle(hasLetter)}>
+        {hasLetter ? iconCheck : iconX} {t('validation.passwordRequirements.letter')}
+      </div>
+    </div>
+  );
+}
 
 function HomePageForm() {
   const { toast } = useToast();
   const t = useTranslations('landing');
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema(t)),
     defaultValues: {
       firstname: '',
       lastname: '',
       email: '',
       password: '',
+      confirmPassword: '',
       promoCode: '',
     },
   });
@@ -73,24 +107,43 @@ function HomePageForm() {
   });
 
   const onSubmit = (data: FormValues) => {
+    if (data.password !== data.confirmPassword) {
+      toast({
+        title: 'Error',
+        description: t('validation.password.mismatch'),
+        variant: 'destructive',
+      });
+      return;
+    }
+
     registerMutation.mutate(data);
   };
 
-  const renderFieldText = (opts: { name: keyof FormValues }) => (
+  const renderFieldText = (opts: {
+    name: keyof FormValues;
+    hideLabel?: boolean;
+    hideMessage?: boolean;
+  }) => (
     <FormField
       control={form.control}
       name={opts.name}
       render={({ field }) => (
-        <FormItem>
-          <FormLabel className="font-bold">{t(`form.fields.${opts.name}.label`)}</FormLabel>
+        <FormItem className="font-hanken-grotesk">
+          {!opts.hideLabel && (
+            <FormLabel className="font-bold">{t(`form.fields.${opts.name}.label`)}</FormLabel>
+          )}
           <FormControl>
             <Input
               placeholder={t(`form.fields.${opts.name}.placeholder`)}
               {...field}
-              className="bg-white border-2 border-black rounded-full h-10 font-hanken-grotesk text-sm"
+              className="bg-white border-2 border-black rounded-full h-10 text-sm"
+              type={opts.name.includes('password') ? 'password' : 'text'}
             />
           </FormControl>
-          <FormMessage />
+          {opts.name === 'confirmPassword' && (
+            <PasswordRequirements password={form.watch('password')} />
+          )}
+          {!opts.hideMessage && <FormMessage className="font-medium text-center text-red-600" />}
         </FormItem>
       )}
     />
@@ -114,6 +167,13 @@ function HomePageForm() {
 
           {renderFieldText({
             name: 'password',
+            hideMessage: true,
+          })}
+
+          {renderFieldText({
+            name: 'confirmPassword',
+            hideLabel: true,
+            hideMessage: true,
           })}
 
           {renderFieldText({
@@ -269,7 +329,6 @@ function HomePageBadge(opts: { children: React.ReactNode; className?: string }) 
 
 export default function HomePage() {
   const t = useTranslations('landing');
-  // const [showSettings, setShowSettings] = React.useState(false);
   const formContainerRef = React.useRef<HTMLDivElement>(null);
 
   const _scrollToForm = () => {

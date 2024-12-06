@@ -65,6 +65,10 @@
           "label": "Password",
           "placeholder": "Enter your password"
         },
+        "confirmPassword": {
+          "label": "Confirm password",
+          "placeholder": "Confirm your password"
+        },
         "promoCode": {
           "label": "Promo Code",
           "placeholder": "Enter promo code"
@@ -113,6 +117,32 @@
         "explanation": "The Expense Tracker is a complete tool to categorise, track your different expenses and notify you of any changes."
       },
       "userSince": "User since {date}"
+    },
+    "validation": {
+      "firstname": {
+        "required": "First name is required"
+      },
+      "lastname": {
+        "required": "Last name is required"
+      },
+      "email": {
+        "required": "Email is required",
+        "invalid": "Invalid email address"
+      },
+      "password": {
+        "minLength": "Password must be at least 6 characters",
+        "requireNumber": "Password must contain at least one number",
+        "requireLetter": "Password must contain at least one letter",
+        "mismatch": "Passwords do not match"
+      },
+      "promoCode": {
+        "required": "Promo code is required"
+      },
+      "passwordRequirements": {
+        "minLength": "At least 6 characters",
+        "number": "At least 1 number",
+        "letter": "At least 1 letter"
+      }
     }
   }
 }
