@@ -97,10 +97,6 @@ function HomePageForm() {
   const registerMutation = useMutation({
     mutationFn: (data: RegisterPayload) => register(data),
     onSuccess: () => {
-      toast({
-        title: 'Success',
-        description: 'Registration successful',
-      });
       setShowConfirmation(true);
     },
     onError: error => {
