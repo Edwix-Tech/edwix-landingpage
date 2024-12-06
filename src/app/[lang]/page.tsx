@@ -26,7 +26,6 @@ import mustache from 'mustache';
 import { Bell, DollarSign, Mail, Lock, Calendar, Star, Sparkle } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-// import { SettingsModal } from '@/components/settings-modal';
 import Link from 'next/link';
 
 const formSchema = z.object({
@@ -285,11 +284,7 @@ export default function HomePage() {
         className="bg-black text-white p-4 w-full flex flex-col items-center"
         onClick={_scrollToForm}
       >
-        <div className="container text-center font-hanken-grotesk text-sm">
-          {t('promoHeader')}
-          {/* <Button onClick={() => setShowSettings(true)}>Settings</Button> */}
-          {/* <SettingsModal open={showSettings} onOpenChange={setShowSettings} /> */}
-        </div>
+        <div className="container text-center font-hanken-grotesk text-sm">{t('promoHeader')}</div>
       </div>
       <div className="w-full">
         <div className="relative flex flex-col items-center pt-4">

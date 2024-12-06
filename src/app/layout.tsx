@@ -24,8 +24,10 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
+  params: { lang },
 }: Readonly<{
   children: React.ReactNode;
+  params: { lang: string };
 }>) {
   const locale = await getLocale();
 
@@ -37,7 +39,7 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <body className={`${lora.className} ${hankenGrotesk.variable} antialiased`}>
         <ReactQueryProvider>
-          <NextIntlClientProvider messages={messages}>
+          <NextIntlClientProvider messages={messages} locale={lang}>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               {children}
             </ThemeProvider>
