@@ -24,12 +24,13 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-  params: { lang },
+  params,
 }: Readonly<{
   children: React.ReactNode;
-  params: { lang: string };
+  params: Promise<{ lang: string }>;
 }>) {
   const locale = await getLocale();
+  const { lang } = await params;
 
   // Providing all messages to the client
   // side is the easiest way to get started
