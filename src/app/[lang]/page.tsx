@@ -376,7 +376,7 @@ export default function HomePage() {
             </h2>
 
             <div className="flex items-center gap-3 py-4">
-              <Link href="/case-studies">
+              <Link href="#case-studies">
                 <Button
                   size="lg"
                   className="rounded-full font-hanken-grotesk border-2 border-black text-black h-12 shadow-plain hover:shadow-none transition-all"
@@ -398,7 +398,7 @@ export default function HomePage() {
                 src="/images/hero-illustration.svg"
                 alt="Edwix"
                 className=""
-                width={window.innerWidth}
+                width={typeof window === 'undefined' ? 500 : window.innerWidth}
                 height={100}
               />
             </div>
