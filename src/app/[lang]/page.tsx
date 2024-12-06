@@ -21,7 +21,19 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { register } from '@/lib/api/mutations';
 import type { RegisterPayload } from '@/lib/api/mutations';
-import { Bell, DollarSign, Mail, Lock, Calendar, Star, Sparkle, Check, X } from 'lucide-react';
+import {
+  Bell,
+  DollarSign,
+  Mail,
+  Lock,
+  Calendar,
+  Star,
+  Sparkle,
+  Check,
+  X,
+  Eye,
+  EyeOff,
+} from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
@@ -93,6 +105,8 @@ function HomePageForm() {
   });
 
   const [showConfirmation, setShowConfirmation] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
   const registerMutation = useMutation({
     mutationFn: (data: RegisterPayload) => register(data),
@@ -135,12 +149,42 @@ function HomePageForm() {
             <FormLabel className="font-bold">{t(`form.fields.${opts.name}.label`)}</FormLabel>
           )}
           <FormControl>
-            <Input
-              placeholder={t(`form.fields.${opts.name}.placeholder`)}
-              {...field}
-              className="bg-white border-2 border-black rounded-full h-10 text-sm"
-              type={opts.name.includes('password') ? 'password' : 'text'}
-            />
+            <div className="relative">
+              <Input
+                placeholder={t(`form.fields.${opts.name}.placeholder`)}
+                {...field}
+                className="bg-white border-2 border-black rounded-full h-10 text-sm"
+                type={
+                  opts.name === 'password'
+                    ? showPassword
+                      ? 'text'
+                      : 'password'
+                    : opts.name === 'confirmPassword'
+                    ? showConfirmPassword
+                      ? 'text'
+                      : 'password'
+                    : 'text'
+                }
+              />
+              {(opts.name === 'password' || opts.name === 'confirmPassword') && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    opts.name === 'password'
+                      ? setShowPassword(!showPassword)
+                      : setShowConfirmPassword(!showConfirmPassword)
+                  }
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {(opts.name === 'password' && showPassword) ||
+                  (opts.name === 'confirmPassword' && showConfirmPassword) ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
+              )}
+            </div>
           </FormControl>
           {opts.name === 'confirmPassword' && (
             <PasswordRequirements password={form.watch('password')} />
