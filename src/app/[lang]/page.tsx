@@ -22,7 +22,6 @@ import { Card } from '@/components/ui/card';
 import { register } from '@/lib/api/mutations';
 import type { RegisterPayload } from '@/lib/api/mutations';
 import { env } from '@/lib/env';
-import mustache from 'mustache';
 import { Bell, DollarSign, Mail, Lock, Calendar, Star, Sparkle, Check, X } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -88,14 +87,13 @@ function HomePageForm() {
 
   const registerMutation = useMutation({
     mutationFn: (data: RegisterPayload) => register(data),
-    onSuccess: data => {
+    onSuccess: () => {
       toast({
         title: 'Success',
         description: 'Registration successful',
       });
 
-      const redirectUrl = new URL(mustache.render(env().REDIRECT_URL, { token: data.accessToken }));
-      window.location.href = redirectUrl.toString();
+      window.location.href = env().REDIRECT_URL;
     },
     onError: error => {
       toast({
