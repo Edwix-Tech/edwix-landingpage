@@ -29,12 +29,13 @@ export const register = async (data: RegisterPayload): Promise<RegisterResponse>
   });
 
   if (!response.ok) {
+    let message = 'Register failed';
     try {
       const json = await response.json();
-      throw new Error(json.error);
-    } catch {
-      throw new Error('Register failed');
-    }
+      message = json.error;
+    } catch {}
+
+    throw new Error(message);
   }
 
   return response.json();
