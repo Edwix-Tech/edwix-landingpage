@@ -14,7 +14,7 @@ function Badge(opts: { children: React.ReactNode; className?: string }) {
   return (
     <div
       className={cn(
-        'rounded-full border border-black px-3 py-1 bg-primary/90 flex items-center whitespace-nowrap text-black uppercase font-medium font-dm-sans',
+        'mx-2 rounded-full border border-black px-3 py-1 bg-primary/90 flex items-center text-center text-black uppercase font-medium font-dm-sans text-sm md:text-base',
         opts.className
       )}
     >
@@ -167,16 +167,16 @@ export default function HomePage() {
               {t('mainTitle.content')}
             </h2>
 
-            <div className="flex items-center gap-3 py-4">
+            <div className="flex items-center justify-center gap-3 py-4 flex-wrap mx-2">
               <Button
-                size="lg"
+                size="default"
                 className="rounded-full uppercase font-bold border-2 border-black text-black h-12 shadow-plain hover:shadow-none transition-all font-dm-sans"
                 onClick={_scrollToTestimonials}
               >
                 {t('buttons.caseStudies')}
               </Button>
               <Button
-                size="lg"
+                size="default"
                 className="rounded-full uppercase font-bold border-2 border-black text-black h-12 shadow-plain bg-white hover:bg-foreground hover:shadow-none transition-all font-dm-sans"
                 onClick={_scrollToForm}
               >

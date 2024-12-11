@@ -59,13 +59,13 @@ function PasswordRequirements({
   const passwordsMatch = password === confirmPassword && password.length > 0;
 
   const requirementStyle = (met: boolean) =>
-    cn('flex items-center gap-2 text-xs', met ? 'text-primary' : 'text-red-600');
+    cn('flex items-center gap-1 md:gap-2 text-xs', met ? 'text-primary' : 'text-red-600');
 
-  const iconCheck = <Check className="w-4 h-4" />;
-  const iconX = <X className="w-4 h-4" />;
+  const iconCheck = <Check className="w-3 h-3" />;
+  const iconX = <X className="w-3 h-3" />;
 
   return (
-    <div className="flex w-full justify-center gap-4 px-2 mt-1 font-medium flex-wrap">
+    <div className="flex w-full justify-center gap-2 md:gap-3 px-2 mt-1 font-medium flex-wrap">
       <div className={requirementStyle(hasMinLength)}>
         {hasMinLength ? iconCheck : iconX} {t('validation.passwordRequirements.minLength')}
       </div>
@@ -209,7 +209,7 @@ export function HomePageForm() {
   );
 
   return (
-    <Card className="p-6 bg-foreground border-2 border-black shadow-plain-lg">
+    <Card className="p-4 md:p-6 bg-foreground border-2 border-black shadow-plain-lg">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {renderFieldText({
