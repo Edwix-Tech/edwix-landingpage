@@ -24,7 +24,7 @@
     }
   },
   "landing": {
-    "promoHeader": "You have a promo code? Redeem it right now!",
+    "promoHeader": "You have an activation code? Redeem it right now!",
     "mainBadge": "Your all in one home management app",
     "mainTitle": {
       "prefix": "Say goodbye",
@@ -70,13 +70,13 @@
           "placeholder": "Confirm your password"
         },
         "promoCode": {
-          "label": "Promo Code",
-          "placeholder": "Enter promo code"
+          "label": "Activation code",
+          "placeholder": "Enter your activation code"
         }
       },
       "submit": {
-        "loading": "Registration in progress...",
-        "default": "Register"
+        "loading": "Sign up in progress...",
+        "default": "Sign up"
       }
     },
     "features": {
@@ -136,7 +136,7 @@
         "mismatch": "Passwords do not match"
       },
       "promoCode": {
-        "required": "Promo code is required"
+        "required": "Activation code is required"
       },
       "passwordRequirements": {
         "minLength": "At least 6 characters",

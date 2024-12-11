@@ -45,6 +45,10 @@ import {
   DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import { Pagination } from 'swiper/modules';
+import 'swiper/css/pagination';
 
 const formSchema = (t: (key: string) => string) =>
   z.object({
@@ -359,35 +363,45 @@ function HomePageTestimonials() {
   ];
 
   return (
-    <div className="p-4 bg-foreground flex flex-col gap-4">
+    <Swiper
+      modules={[Pagination]}
+      slidesPerView="auto"
+      onSlideChange={() => console.log('slide change')}
+      onSwiper={swiper => console.log(swiper)}
+      pagination={{ clickable: true }}
+      className="w-full overflow-hidden"
+      centeredSlides
+    >
       {testimonials.map(testimonial => (
-        <Card key={testimonial.name} className="flex flex-col gap-4 p-6 py-10 border border-black">
-          <div className="flex flex-col gap-2 items-center">
-            <Image
-              src={testimonial.imagePath}
-              alt={testimonial.name}
-              width={100}
-              height={100}
-              className="object-cover h-16 w-16 rounded-full border border-black"
-            />
-            <div className="flex flex-col items-center">
-              <h3 className="text-xs font-medium font-hanken-grotesk">
-                {testimonial.name}, {testimonial.city}
-              </h3>
-              <p className="text-xs font-hanken-grotesk">
-                {t('testimonials.userSince', { date: testimonial.since.toLocaleDateString() })}
-              </p>
+        <SwiperSlide key={testimonial.name} className="px-4 pb-8 w-full max-w-md">
+          <Card className="flex flex-col gap-4 p-6 py-10 border border-black">
+            <div className="flex flex-col gap-2 items-center">
+              <Image
+                src={testimonial.imagePath}
+                alt={testimonial.name}
+                width={100}
+                height={100}
+                className="object-cover h-16 w-16 rounded-full border border-black"
+              />
+              <div className="flex flex-col items-center">
+                <h3 className="text-xs font-medium font-hanken-grotesk">
+                  {testimonial.name}, {testimonial.city}
+                </h3>
+                <p className="text-xs font-hanken-grotesk">
+                  {t('testimonials.userSince', { date: testimonial.since.toLocaleDateString() })}
+                </p>
+              </div>
             </div>
-          </div>
-          <p className="text-xl text-center font-medium">
-            &ldquo;{`  ${testimonial.quote}  `}&rdquo;
-          </p>
-          <p className="text-xs font-hanken-grotesk text-muted-foreground">
-            *{testimonial.explanation}
-          </p>
-        </Card>
+            <p className="text-xl text-center font-medium">
+              &ldquo;{`  ${testimonial.quote}  `}&rdquo;
+            </p>
+            <p className="text-xs font-hanken-grotesk text-muted-foreground">
+              *{testimonial.explanation}
+            </p>
+          </Card>
+        </SwiperSlide>
       ))}
-    </div>
+    </Swiper>
   );
 }
 
@@ -395,7 +409,7 @@ function HomePageBadge(opts: { children: React.ReactNode; className?: string }) 
   return (
     <div
       className={cn(
-        'rounded-md bg-blue-50 border border-primary/80 font-hanken-grotesk px-3 py-1 bg-primary/20 flex items-center whitespace-nowrap text-sm',
+        'rounded-full bg-blue-50 border border-black font-hanken-grotesk px-3 py-1 bg-primary flex items-center whitespace-nowrap text-black uppercase font-bold',
         opts.className
       )}
     >
@@ -425,21 +439,88 @@ export default function HomePage() {
       <div className="w-full">
         <div className="relative flex flex-col items-center pt-4">
           <Sparkle
-            className="w-12 h-12 text-gray-800 absolute top-[10%] right-[15%] opacity-70 -z-1"
+            className="w-5 h-5 text-gray-800 absolute top-[10%] right-[15%] opacity-70 -z-1"
+            fill="currentColor"
+          />
+          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[20%] left-[12%] opacity-70 -z-1" />
+          <Sparkle
+            className="w-5 h-5 text-gray-800 absolute bottom-[35%] right-[8%] opacity-70 -z-1"
+            fill="currentColor"
+          />
+          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[55%] left-[25%] opacity-70 -z-1" />
+          <Sparkle
+            className="w-5 h-5 text-gray-800 absolute bottom-[60%] right-[18%] opacity-70 -z-1"
+            fill="currentColor"
+          />
+          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[28%] left-[38%] opacity-70 -z-1" />
+          <Sparkle
+            className="w-5 h-5 text-gray-800 absolute bottom-[42%] right-[33%] opacity-70 -z-1"
+            fill="currentColor"
+          />
+          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[65%] left-[15%] opacity-70 -z-1" />
+          <Sparkle className="w-5 h-5 text-gray-800 absolute bottom-[75%] right-[22%] opacity-70 -z-1" />
+          <Sparkle
+            className="w-5 h-5 text-gray-800 absolute top-[48%] left-[42%] opacity-70 -z-1"
             fill="currentColor"
           />
           <Sparkle
-            className="w-12 h-12 text-gray-800 absolute top-[20%] left-[12%] opacity-70 -z-1"
+            className="w-5 h-5 text-gray-800 absolute top-[10%] right-[15%] opacity-70 -z-1"
+            fill="currentColor"
+          />
+          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[20%] left-[12%] opacity-70 -z-1" />
+          <Sparkle
+            className="w-5 h-5 text-gray-800 absolute bottom-[35%] right-[8%] opacity-70 -z-1"
             fill="currentColor"
           />
           <Sparkle
-            className="w-12 h-12 text-gray-800 absolute bottom-[35%] right-[8%] opacity-70 -z-1"
+            className="w-5 h-5 text-gray-800 absolute top-[32%] right-[10%] opacity-70 -z-1"
             fill="currentColor"
           />
-          <Sparkle className="w-12 h-12 text-gray-800 absolute top-[32%] right-[10%] opacity-70 -z-1" />
-          <Sparkle className="w-12 h-12 text-gray-800 absolute bottom-[20%] left-[6%] opacity-70 -z-1" />
+          <Sparkle className="w-5 h-5 text-gray-800 absolute bottom-[20%] left-[6%] opacity-70 -z-1" />
+          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[45%] left-[18%] opacity-70 -z-1" />
+          <Sparkle
+            className="w-5 h-5 text-gray-800 absolute bottom-[40%] right-[20%] opacity-70 -z-1"
+            fill="currentColor"
+          />
+          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[15%] right-[25%] opacity-70 -z-1" />
+          <Sparkle
+            className="w-5 h-5 text-gray-800 absolute bottom-[25%] left-[22%] opacity-70 -z-1"
+            fill="currentColor"
+          />
+          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[8%] left-[30%] opacity-70 -z-1" />
+          <Sparkle
+            className="w-5 h-5 text-gray-800 absolute bottom-[15%] right-[28%] opacity-70 -z-1"
+            fill="currentColor"
+          />
+          <Sparkle
+            className="w-5 h-5 text-gray-800 absolute top-[38%] left-[8%] opacity-70 -z-1"
+            fill="currentColor"
+          />
+          <Sparkle
+            className="w-5 h-5 text-gray-800 absolute bottom-[45%] left-[35%] opacity-70 -z-1"
+            fill="currentColor"
+          />
+          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[25%] right-[32%] opacity-70 -z-1" />
+          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[50%] right-[40%] opacity-70 -z-1" />
+          <Sparkle
+            className="w-5 h-5 text-gray-800 absolute bottom-[30%] left-[40%] opacity-70 -z-1"
+            fill="currentColor"
+          />
+          <Sparkle
+            className="w-5 h-5 text-gray-800 absolute top-[8%] left-[45%] opacity-70 -z-1"
+            fill="currentColor"
+          />
+          <Sparkle
+            className="w-5 h-5 text-gray-800 absolute bottom-[50%] right-[45%] opacity-70 -z-1"
+            fill="currentColor"
+          />
+          <Sparkle
+            className="w-5 h-5 text-gray-800 absolute top-[42%] left-[48%] opacity-70 -z-1"
+            fill="currentColor"
+          />
+          <Sparkle className="w-5 h-5 text-gray-800 absolute bottom-[18%] right-[15%] opacity-70 -z-1" />
 
-          <div className="relative z-10 flex flex-col items-center gap-4">
+          <div className="relative z-10 flex flex-col items-center gap-6">
             <div className="flex justify-center my-4">
               <Image src="/images/logo-white.svg" alt="Edwix" width={200} height={100} />
             </div>
@@ -456,28 +537,34 @@ export default function HomePage() {
               <Link href="#case-studies">
                 <Button
                   size="lg"
-                  className="rounded-full font-hanken-grotesk border-2 border-black text-black h-12 shadow-plain hover:shadow-none transition-all"
+                  className="rounded-full uppercase font-bold font-hanken-grotesk border-2 border-black text-black h-12 shadow-plain hover:shadow-none transition-all"
                 >
                   {t('buttons.caseStudies')}
                 </Button>
               </Link>
               <Button
                 size="lg"
-                className="rounded-full font-hanken-grotesk border-2 border-black text-black h-12 shadow-plain bg-white hover:bg-foreground hover:shadow-none transition-all"
+                className="rounded-full uppercase font-bold font-hanken-grotesk border-2 border-black text-black h-12 shadow-plain bg-white hover:bg-foreground hover:shadow-none transition-all"
                 onClick={_scrollToForm}
               >
                 {t('buttons.getFreeYear')}
               </Button>
             </div>
 
-            <div className="w-full max-w-md px-8">
-              <Image
-                src="/images/hero-illustration.svg"
-                alt="Edwix"
-                className=""
-                width={500}
-                height={100}
-              />
+            <div className="flex flex-col items-center pb-10">
+              <div className="w-full max-w-md px-8">
+                <Image
+                  src="/images/hero-illustration.svg"
+                  alt="Edwix"
+                  className=""
+                  width={500}
+                  height={100}
+                />
+              </div>
+
+              <div className="px-4 md:px-8">
+                <HomePageForm />
+              </div>
             </div>
           </div>
         </div>
@@ -485,7 +572,7 @@ export default function HomePage() {
         <div className="py-4 bg-foreground flex flex-col gap-4">
           <div className="py-4 flex flex-col gap-4">
             <div className="flex justify-center">
-              <HomePageBadge className="text-black">
+              <HomePageBadge>
                 {t('rating.prefix')}
                 <span className="inline-flex items-center -space-x-2.5">
                   <Star className="h-3" fill="currentColor" />
@@ -508,7 +595,7 @@ export default function HomePage() {
 
           <div className="py-4 flex flex-col gap-4">
             <div className="flex justify-center">
-              <HomePageBadge className="text-black">{t('features.badge')}</HomePageBadge>
+              <HomePageBadge>{t('features.badge')}</HomePageBadge>
             </div>
 
             <h2 className="text-2xl mx-6 text-center text-black font-medium">
@@ -518,34 +605,6 @@ export default function HomePage() {
             </h2>
 
             <HomePageFeatures />
-          </div>
-        </div>
-
-        <div className="p-4 py-8 flex flex-col relative" ref={formContainerRef}>
-          <Sparkle
-            className="w-12 h-12 text-gray-800 absolute top-[12%] right-[15%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle
-            className="w-12 h-12 text-gray-800 absolute top-[20%] left-[12%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle className="w-12 h-12 text-gray-800 absolute bottom-[2.5%] right-[25%] opacity-70 -z-1" />
-          <Sparkle className="w-12 h-12 text-gray-800 absolute bottom-[1%] left-[2%] opacity-70 -z-1" />
-
-          <div className="flex flex-col gap-4 z-10">
-            <div className="flex justify-center">
-              <HomePageBadge>{t('form.badge')}</HomePageBadge>
-            </div>
-
-            <h2 className="text-2xl mx-6 text-center font-medium">
-              <strong className="font-medium text-primary">{t('form.title.prefix')}</strong>{' '}
-              {t('form.title.content')}
-            </h2>
-
-            <div className="p-4">
-              <HomePageForm />
-            </div>
           </div>
         </div>
       </div>
