@@ -110,11 +110,11 @@
     "testimonials": {
       "nathalie": {
         "quote": "The **GoEmail** feature saved my inbox from being overflooded and also organised my bills under one roof",
-        "explanation": "GoEmail is one of the core features of Edwix, skipping your inbox and synchronizing all your bills in Edwix, automatically!"
+        "explanation": "GoEmail is a dedicated email for your property documents, skipping your personal inbox and synchronizing all your bills in Edwix, automatically!"
       },
       "christian": {
         "quote": "I learned that I was paying too much electricity with the **expense tracker**, found out I had electrical problems that could've been costly if unfixed",
-        "explanation": "The Expense Tracker is a complete tool to categorise, track your different expenses and notify you of any changes."
+        "explanation": "The Expense Tracker is one of the core features of Edwix, consolidating your expenses into one view just by uploading your invoices and receipts"
       },
       "userSince": "User since {date}"
     },
