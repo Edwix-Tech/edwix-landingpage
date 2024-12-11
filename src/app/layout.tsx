@@ -5,16 +5,16 @@ import { getLocale, getMessages } from 'next-intl/server';
 import { ReactQueryProvider } from '@/components/react-query-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
-import { Lora, Hanken_Grotesk } from 'next/font/google';
-
-const lora = Lora({
-  subsets: ['latin'],
-  variable: '--font-lora',
-});
+import { Hanken_Grotesk, DM_Sans } from 'next/font/google';
 
 const hankenGrotesk = Hanken_Grotesk({
   subsets: ['latin'],
   variable: '--font-hanken-grotesk',
+});
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-dm-sans',
 });
 
 export const metadata: Metadata = {
@@ -38,7 +38,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={`${lora.className} ${hankenGrotesk.variable} antialiased bg-secondary`}>
+      <body className={`${dmSans.variable} ${hankenGrotesk.variable} antialiased bg-secondary`}>
         <ReactQueryProvider>
           <NextIntlClientProvider messages={messages} locale={lang}>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

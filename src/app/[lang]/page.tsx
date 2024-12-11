@@ -1,415 +1,20 @@
 'use client';
 
 import * as React from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useMutation } from '@tanstack/react-query';
-import { useToast } from '@/hooks/use-toast';
 import { useTranslations } from 'next-intl';
-
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { register } from '@/lib/api/mutations';
-import type { RegisterPayload } from '@/lib/api/mutations';
-import {
-  Bell,
-  DollarSign,
-  Mail,
-  Lock,
-  Calendar,
-  Star,
-  Sparkle,
-  Check,
-  X,
-  Eye,
-  EyeOff,
-} from 'lucide-react';
+import { Star, Sparkle } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from '@/components/ui/dialog';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import { Pagination } from 'swiper/modules';
-import 'swiper/css/pagination';
+import { HomePageForm } from './_form';
+import { HomePageTestimonials } from './_testimonials';
+import { HomePageFeatures } from './_features';
 
-const formSchema = (t: (key: string) => string) =>
-  z.object({
-    firstname: z.string().min(1, t('validation.firstname.required')),
-    lastname: z.string().min(1, t('validation.lastname.required')),
-    email: z.string().email(t('validation.email.invalid')),
-    password: z.string(),
-    confirmPassword: z
-      .string()
-      .min(6, t('validation.password.minLength'))
-      .regex(/[0-9]/, t('validation.password.requireNumber'))
-      .regex(/[a-zA-Z]/, t('validation.password.requireLetter')),
-    promoCode: z.string().min(1, t('validation.promoCode.required')),
-  });
-
-type FormValues = z.infer<ReturnType<typeof formSchema>>;
-
-function PasswordRequirements({
-  password,
-  confirmPassword,
-}: {
-  password: string;
-  confirmPassword: string;
-}) {
-  const t = useTranslations('landing');
-  const hasMinLength = password.length >= 6;
-  const hasNumber = /[0-9]/.test(password);
-  const hasLetter = /[a-zA-Z]/.test(password);
-  const passwordsMatch = password === confirmPassword && password.length > 0;
-
-  const requirementStyle = (met: boolean) =>
-    cn('flex items-center gap-2 text-xs', met ? 'text-primary' : 'text-red-600');
-
-  const iconCheck = <Check className="w-4 h-4" />;
-  const iconX = <X className="w-4 h-4" />;
-
-  return (
-    <div className="flex w-full justify-center gap-4 px-2 mt-1 font-medium flex-wrap">
-      <div className={requirementStyle(hasMinLength)}>
-        {hasMinLength ? iconCheck : iconX} {t('validation.passwordRequirements.minLength')}
-      </div>
-      <div className={requirementStyle(hasNumber)}>
-        {hasNumber ? iconCheck : iconX} {t('validation.passwordRequirements.number')}
-      </div>
-      <div className={requirementStyle(hasLetter)}>
-        {hasLetter ? iconCheck : iconX} {t('validation.passwordRequirements.letter')}
-      </div>
-      <div className={requirementStyle(passwordsMatch)}>
-        {passwordsMatch ? iconCheck : iconX} {t('validation.passwordRequirements.match')}
-      </div>
-    </div>
-  );
-}
-
-function HomePageForm() {
-  const { toast } = useToast();
-  const t = useTranslations('landing');
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema(t)),
-    defaultValues: {
-      firstname: '',
-      lastname: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      promoCode: '',
-    },
-  });
-
-  const [showConfirmation, setShowConfirmation] = React.useState(false);
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
-
-  const registerMutation = useMutation({
-    mutationFn: (data: RegisterPayload) => register(data),
-    onSuccess: () => {
-      setShowConfirmation(true);
-      form.reset();
-    },
-    onError: error => {
-      toast({
-        title: 'Error',
-        description: error.message,
-        variant: 'destructive',
-      });
-    },
-  });
-
-  const onSubmit = (data: FormValues) => {
-    if (data.password !== data.confirmPassword) {
-      toast({
-        title: 'Error',
-        description: t('validation.password.mismatch'),
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    registerMutation.mutate(data);
-  };
-
-  const renderFieldText = (opts: {
-    name: keyof FormValues;
-    hideLabel?: boolean;
-    hideMessage?: boolean;
-  }) => (
-    <FormField
-      control={form.control}
-      name={opts.name}
-      render={({ field }) => (
-        <FormItem className="font-hanken-grotesk">
-          {!opts.hideLabel && (
-            <FormLabel className="font-bold">{t(`form.fields.${opts.name}.label`)}</FormLabel>
-          )}
-          <FormControl>
-            <div className="relative">
-              <Input
-                placeholder={t(`form.fields.${opts.name}.placeholder`)}
-                {...field}
-                className="bg-white border-2 border-black rounded-full h-10 text-sm"
-                type={
-                  opts.name === 'password'
-                    ? showPassword
-                      ? 'text'
-                      : 'password'
-                    : opts.name === 'confirmPassword'
-                    ? showConfirmPassword
-                      ? 'text'
-                      : 'password'
-                    : 'text'
-                }
-              />
-              {(opts.name === 'password' || opts.name === 'confirmPassword') && (
-                <button
-                  type="button"
-                  onClick={() =>
-                    opts.name === 'password'
-                      ? setShowPassword(!showPassword)
-                      : setShowConfirmPassword(!showConfirmPassword)
-                  }
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                >
-                  {(opts.name === 'password' && showPassword) ||
-                  (opts.name === 'confirmPassword' && showConfirmPassword) ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </button>
-              )}
-            </div>
-          </FormControl>
-          {opts.name === 'confirmPassword' && (
-            <PasswordRequirements
-              password={form.watch('password')}
-              confirmPassword={form.watch('confirmPassword')}
-            />
-          )}
-          {!opts.hideMessage && <FormMessage className="font-medium text-center text-red-600" />}
-        </FormItem>
-      )}
-    />
-  );
-
-  const confirmationDialog = (
-    <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
-      <DialogContent className="sm:max-w-[425px] text-black">
-        <DialogHeader>
-          <DialogTitle>{t('confirmation.title')}</DialogTitle>
-          <DialogDescription>{t('confirmation.description')}</DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Button variant="ghost" type="submit" onClick={() => setShowConfirmation(false)}>
-            {t('confirmation.close')}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-
-  return (
-    <Card className="p-6 bg-foreground border-2 border-black shadow-plain-lg">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {renderFieldText({
-            name: 'firstname',
-          })}
-
-          {renderFieldText({
-            name: 'lastname',
-          })}
-
-          {renderFieldText({
-            name: 'email',
-          })}
-
-          {renderFieldText({
-            name: 'password',
-            hideMessage: true,
-          })}
-
-          {renderFieldText({
-            name: 'confirmPassword',
-            hideLabel: true,
-            hideMessage: true,
-          })}
-
-          {renderFieldText({
-            name: 'promoCode',
-          })}
-
-          <div className="h-2" />
-
-          <Button
-            size="lg"
-            type="submit"
-            className="w-full uppercase rounded-full border-2 border-black text-inverse font-bold font-hanken-grotesk shadow-plain hover:shadow-none transition-all"
-            disabled={registerMutation.isPending}
-          >
-            {registerMutation.isPending ? t('form.submit.loading') : t('form.submit.default')}
-          </Button>
-        </form>
-      </Form>
-      {confirmationDialog}
-    </Card>
-  );
-}
-
-type FeatureItem = {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-};
-
-function HomePageFeatures() {
-  const t = useTranslations('landing');
-  const features: FeatureItem[] = [
-    {
-      icon: <DollarSign />,
-      title: t('features.expenseTracker.title'),
-      description: t('features.expenseTracker.description'),
-    },
-    {
-      icon: <Bell />,
-      title: t('features.alerts.title'),
-      description: t('features.alerts.description'),
-    },
-    {
-      icon: <Mail />,
-      title: t('features.goEmail.title'),
-      description: t('features.goEmail.description'),
-    },
-    {
-      icon: <Lock />,
-      title: t('features.vault.title'),
-      description: t('features.vault.description'),
-    },
-    {
-      icon: <Calendar />,
-      title: t('features.calendar.title'),
-      description: t('features.calendar.description'),
-    },
-  ];
-
-  return (
-    <div className="text-center p-4 bg-foreground flex flex-col gap-4">
-      {features.map(feature => (
-        <Card key={feature.title} className="p-4 border border-black shadow-none">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 flex items-center justify-center rounded-full bg-black text-white shrink-0">
-              {feature.icon}
-            </div>
-            <div className="w-full text-left">
-              <h3 className="text-2xl font-medium">{feature.title}</h3>
-              <p className="text-sm font-hanken-grotesk">{feature.description}</p>
-            </div>
-          </div>
-        </Card>
-      ))}
-    </div>
-  );
-}
-
-type TestimonialItem = {
-  name: string;
-  city: string;
-  since: Date;
-  quote: string;
-  imagePath: string;
-  explanation: string;
-};
-
-function HomePageTestimonials() {
-  const t = useTranslations('landing');
-  const testimonials: TestimonialItem[] = [
-    {
-      name: 'Nathalie',
-      city: 'Québec',
-      since: new Date('2023-01-01'),
-      quote: t('testimonials.nathalie.quote'),
-      imagePath: '/images/testimonials/1.jpg',
-      explanation: t('testimonials.nathalie.explanation'),
-    },
-    {
-      name: 'Christian',
-      city: 'Laval',
-      since: new Date('2023-01-01'),
-      quote: t('testimonials.christian.quote'),
-      imagePath: '/images/testimonials/2.jpg',
-      explanation: t('testimonials.christian.explanation'),
-    },
-  ];
-
-  return (
-    <Swiper
-      modules={[Pagination]}
-      slidesPerView="auto"
-      onSlideChange={() => console.log('slide change')}
-      onSwiper={swiper => console.log(swiper)}
-      pagination={{ clickable: true }}
-      className="w-full overflow-hidden"
-      centeredSlides
-    >
-      {testimonials.map(testimonial => (
-        <SwiperSlide key={testimonial.name} className="px-4 pb-8 w-full max-w-md">
-          <Card className="flex flex-col gap-4 p-6 py-10 border border-black">
-            <div className="flex flex-col gap-2 items-center">
-              <Image
-                src={testimonial.imagePath}
-                alt={testimonial.name}
-                width={100}
-                height={100}
-                className="object-cover h-16 w-16 rounded-full border border-black"
-              />
-              <div className="flex flex-col items-center">
-                <h3 className="text-xs font-medium font-hanken-grotesk">
-                  {testimonial.name}, {testimonial.city}
-                </h3>
-                <p className="text-xs font-hanken-grotesk">
-                  {t('testimonials.userSince', { date: testimonial.since.toLocaleDateString() })}
-                </p>
-              </div>
-            </div>
-            <p className="text-xl text-center font-medium">
-              &ldquo;{`  ${testimonial.quote}  `}&rdquo;
-            </p>
-            <p className="text-xs font-hanken-grotesk text-muted-foreground">
-              *{testimonial.explanation}
-            </p>
-          </Card>
-        </SwiperSlide>
-      ))}
-    </Swiper>
-  );
-}
-
-function HomePageBadge(opts: { children: React.ReactNode; className?: string }) {
+function Badge(opts: { children: React.ReactNode; className?: string }) {
   return (
     <div
       className={cn(
-        'rounded-full bg-blue-50 border border-black font-hanken-grotesk px-3 py-1 bg-primary flex items-center whitespace-nowrap text-black uppercase font-bold',
+        'rounded-full border border-black px-3 py-1 bg-primary/90 flex items-center whitespace-nowrap text-black uppercase font-medium font-dm-sans',
         opts.className
       )}
     >
@@ -418,13 +23,120 @@ function HomePageBadge(opts: { children: React.ReactNode; className?: string }) 
   );
 }
 
+function Sparkles() {
+  return (
+    <>
+      <Sparkle
+        className="w-5 h-5 text-gray-800 absolute top-[10%] right-[15%] opacity-70 -z-1"
+        fill="currentColor"
+      />
+      <Sparkle className="w-5 h-5 text-gray-800 absolute top-[20%] left-[12%] opacity-70 -z-1" />
+      <Sparkle
+        className="w-5 h-5 text-gray-800 absolute bottom-[35%] right-[8%] opacity-70 -z-1"
+        fill="currentColor"
+      />
+      <Sparkle className="w-5 h-5 text-gray-800 absolute top-[55%] left-[25%] opacity-70 -z-1" />
+      <Sparkle
+        className="w-5 h-5 text-gray-800 absolute bottom-[60%] right-[18%] opacity-70 -z-1"
+        fill="currentColor"
+      />
+      <Sparkle className="w-5 h-5 text-gray-800 absolute top-[28%] left-[38%] opacity-70 -z-1" />
+      <Sparkle
+        className="w-5 h-5 text-gray-800 absolute bottom-[42%] right-[33%] opacity-70 -z-1"
+        fill="currentColor"
+      />
+      <Sparkle className="w-5 h-5 text-gray-800 absolute top-[65%] left-[15%] opacity-70 -z-1" />
+      <Sparkle className="w-5 h-5 text-gray-800 absolute bottom-[75%] right-[22%] opacity-70 -z-1" />
+      <Sparkle
+        className="w-5 h-5 text-gray-800 absolute top-[48%] left-[42%] opacity-70 -z-1"
+        fill="currentColor"
+      />
+      <Sparkle
+        className="w-5 h-5 text-gray-800 absolute top-[10%] right-[15%] opacity-70 -z-1"
+        fill="currentColor"
+      />
+      <Sparkle className="w-5 h-5 text-gray-800 absolute top-[20%] left-[12%] opacity-70 -z-1" />
+      <Sparkle
+        className="w-5 h-5 text-gray-800 absolute bottom-[35%] right-[8%] opacity-70 -z-1"
+        fill="currentColor"
+      />
+      <Sparkle
+        className="w-5 h-5 text-gray-800 absolute top-[32%] right-[10%] opacity-70 -z-1"
+        fill="currentColor"
+      />
+      <Sparkle className="w-5 h-5 text-gray-800 absolute bottom-[20%] left-[6%] opacity-70 -z-1" />
+      <Sparkle className="w-5 h-5 text-gray-800 absolute top-[45%] left-[18%] opacity-70 -z-1" />
+      <Sparkle
+        className="w-5 h-5 text-gray-800 absolute bottom-[40%] right-[20%] opacity-70 -z-1"
+        fill="currentColor"
+      />
+      <Sparkle className="w-5 h-5 text-gray-800 absolute top-[15%] right-[25%] opacity-70 -z-1" />
+      <Sparkle
+        className="w-5 h-5 text-gray-800 absolute bottom-[25%] left-[22%] opacity-70 -z-1"
+        fill="currentColor"
+      />
+      <Sparkle className="w-5 h-5 text-gray-800 absolute top-[8%] left-[30%] opacity-70 -z-1" />
+      <Sparkle
+        className="w-5 h-5 text-gray-800 absolute bottom-[15%] right-[28%] opacity-70 -z-1"
+        fill="currentColor"
+      />
+      <Sparkle
+        className="w-5 h-5 text-gray-800 absolute top-[38%] left-[8%] opacity-70 -z-1"
+        fill="currentColor"
+      />
+      <Sparkle
+        className="w-5 h-5 text-gray-800 absolute bottom-[45%] left-[35%] opacity-70 -z-1"
+        fill="currentColor"
+      />
+      <Sparkle className="w-5 h-5 text-gray-800 absolute top-[25%] right-[32%] opacity-70 -z-1" />
+      <Sparkle className="w-5 h-5 text-gray-800 absolute top-[50%] right-[40%] opacity-70 -z-1" />
+      <Sparkle
+        className="w-5 h-5 text-gray-800 absolute bottom-[30%] left-[40%] opacity-70 -z-1"
+        fill="currentColor"
+      />
+      <Sparkle
+        className="w-5 h-5 text-gray-800 absolute top-[8%] left-[45%] opacity-70 -z-1"
+        fill="currentColor"
+      />
+      <Sparkle
+        className="w-5 h-5 text-gray-800 absolute bottom-[50%] right-[45%] opacity-70 -z-1"
+        fill="currentColor"
+      />
+      <Sparkle
+        className="w-5 h-5 text-gray-800 absolute top-[42%] left-[48%] opacity-70 -z-1"
+        fill="currentColor"
+      />
+      <Sparkle className="w-5 h-5 text-gray-800 absolute bottom-[18%] right-[15%] opacity-70 -z-1" />
+    </>
+  );
+}
+
+function FiveStars() {
+  return (
+    <span className="inline-flex items-center -space-x-2.5">
+      <Star className="h-3" fill="currentColor" />
+      <Star className="h-3" fill="currentColor" />
+      <Star className="h-3" fill="currentColor" />
+      <Star className="h-3" fill="currentColor" />
+      <Star className="h-3" fill="currentColor" />
+    </span>
+  );
+}
+
 export default function HomePage() {
   const t = useTranslations('landing');
   const formContainerRef = React.useRef<HTMLDivElement>(null);
+  const testimonialsContainerRef = React.useRef<HTMLDivElement>(null);
 
   const _scrollToForm = () => {
     if (formContainerRef.current) {
       formContainerRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const _scrollToTestimonials = () => {
+    if (testimonialsContainerRef.current) {
+      testimonialsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -434,117 +146,38 @@ export default function HomePage() {
         className="bg-black text-white p-4 w-full flex flex-col items-center"
         onClick={_scrollToForm}
       >
-        <div className="container text-center font-hanken-grotesk text-sm">{t('promoHeader')}</div>
+        <div className="container text-center text-sm">{t('promoHeader')}</div>
       </div>
       <div className="w-full">
         <div className="relative flex flex-col items-center pt-4">
-          <Sparkle
-            className="w-5 h-5 text-gray-800 absolute top-[10%] right-[15%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[20%] left-[12%] opacity-70 -z-1" />
-          <Sparkle
-            className="w-5 h-5 text-gray-800 absolute bottom-[35%] right-[8%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[55%] left-[25%] opacity-70 -z-1" />
-          <Sparkle
-            className="w-5 h-5 text-gray-800 absolute bottom-[60%] right-[18%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[28%] left-[38%] opacity-70 -z-1" />
-          <Sparkle
-            className="w-5 h-5 text-gray-800 absolute bottom-[42%] right-[33%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[65%] left-[15%] opacity-70 -z-1" />
-          <Sparkle className="w-5 h-5 text-gray-800 absolute bottom-[75%] right-[22%] opacity-70 -z-1" />
-          <Sparkle
-            className="w-5 h-5 text-gray-800 absolute top-[48%] left-[42%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle
-            className="w-5 h-5 text-gray-800 absolute top-[10%] right-[15%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[20%] left-[12%] opacity-70 -z-1" />
-          <Sparkle
-            className="w-5 h-5 text-gray-800 absolute bottom-[35%] right-[8%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle
-            className="w-5 h-5 text-gray-800 absolute top-[32%] right-[10%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle className="w-5 h-5 text-gray-800 absolute bottom-[20%] left-[6%] opacity-70 -z-1" />
-          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[45%] left-[18%] opacity-70 -z-1" />
-          <Sparkle
-            className="w-5 h-5 text-gray-800 absolute bottom-[40%] right-[20%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[15%] right-[25%] opacity-70 -z-1" />
-          <Sparkle
-            className="w-5 h-5 text-gray-800 absolute bottom-[25%] left-[22%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[8%] left-[30%] opacity-70 -z-1" />
-          <Sparkle
-            className="w-5 h-5 text-gray-800 absolute bottom-[15%] right-[28%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle
-            className="w-5 h-5 text-gray-800 absolute top-[38%] left-[8%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle
-            className="w-5 h-5 text-gray-800 absolute bottom-[45%] left-[35%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[25%] right-[32%] opacity-70 -z-1" />
-          <Sparkle className="w-5 h-5 text-gray-800 absolute top-[50%] right-[40%] opacity-70 -z-1" />
-          <Sparkle
-            className="w-5 h-5 text-gray-800 absolute bottom-[30%] left-[40%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle
-            className="w-5 h-5 text-gray-800 absolute top-[8%] left-[45%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle
-            className="w-5 h-5 text-gray-800 absolute bottom-[50%] right-[45%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle
-            className="w-5 h-5 text-gray-800 absolute top-[42%] left-[48%] opacity-70 -z-1"
-            fill="currentColor"
-          />
-          <Sparkle className="w-5 h-5 text-gray-800 absolute bottom-[18%] right-[15%] opacity-70 -z-1" />
+          <Sparkles />
 
           <div className="relative z-10 flex flex-col items-center gap-6">
             <div className="flex justify-center my-4">
               <Image src="/images/logo-white.svg" alt="Edwix" width={200} height={100} />
             </div>
             <div className="flex justify-center">
-              <HomePageBadge>{t('mainBadge')}</HomePageBadge>
+              <Badge>{t('mainBadge')}</Badge>
             </div>
 
             <h2 className="text-2xl mx-6 text-center font-medium">
-              <strong className="font-medium text-primary">{t('mainTitle.prefix')}</strong>{' '}
+              <strong className="text-primary font-medium font-dm-sans">
+                {t('mainTitle.prefix')}
+              </strong>{' '}
               {t('mainTitle.content')}
             </h2>
 
             <div className="flex items-center gap-3 py-4">
-              <Link href="#case-studies">
-                <Button
-                  size="lg"
-                  className="rounded-full uppercase font-bold font-hanken-grotesk border-2 border-black text-black h-12 shadow-plain hover:shadow-none transition-all"
-                >
-                  {t('buttons.caseStudies')}
-                </Button>
-              </Link>
               <Button
                 size="lg"
-                className="rounded-full uppercase font-bold font-hanken-grotesk border-2 border-black text-black h-12 shadow-plain bg-white hover:bg-foreground hover:shadow-none transition-all"
+                className="rounded-full uppercase font-bold border-2 border-black text-black h-12 shadow-plain hover:shadow-none transition-all font-dm-sans"
+                onClick={_scrollToTestimonials}
+              >
+                {t('buttons.caseStudies')}
+              </Button>
+              <Button
+                size="lg"
+                className="rounded-full uppercase font-bold border-2 border-black text-black h-12 shadow-plain bg-white hover:bg-foreground hover:shadow-none transition-all font-dm-sans"
                 onClick={_scrollToForm}
               >
                 {t('buttons.getFreeYear')}
@@ -552,9 +185,9 @@ export default function HomePage() {
             </div>
 
             <div className="flex flex-col items-center pb-10">
-              <div className="w-full max-w-md px-8">
+              <div className="w-full max-w-lg px-8 -mb-1">
                 <Image
-                  src="/images/hero-illustration.svg"
+                  src="/images/hero-illustration2.svg"
                   alt="Edwix"
                   className=""
                   width={500}
@@ -562,7 +195,7 @@ export default function HomePage() {
                 />
               </div>
 
-              <div className="px-4 md:px-8">
+              <div ref={formContainerRef} className="px-4 md:px-8">
                 <HomePageForm />
               </div>
             </div>
@@ -572,35 +205,33 @@ export default function HomePage() {
         <div className="py-4 bg-foreground flex flex-col gap-4">
           <div className="py-4 flex flex-col gap-4">
             <div className="flex justify-center">
-              <HomePageBadge>
+              <Badge>
                 {t('rating.prefix')}
-                <span className="inline-flex items-center -space-x-2.5">
-                  <Star className="h-3" fill="currentColor" />
-                  <Star className="h-3" fill="currentColor" />
-                  <Star className="h-3" fill="currentColor" />
-                  <Star className="h-3" fill="currentColor" />
-                  <Star className="h-3" fill="currentColor" />
-                </span>
+                <FiveStars />
                 {t('rating.suffix')}
-              </HomePageBadge>
+              </Badge>
             </div>
 
             <h2 className="text-2xl mx-6 text-center text-black font-medium">
-              <strong className="font-medium text-primary">{t('users.prefix')}</strong>{' '}
+              <strong className="font-medium text-primary font-dm-sans">{t('users.prefix')}</strong>{' '}
               {t('users.content')}
             </h2>
 
-            <HomePageTestimonials />
+            <div ref={testimonialsContainerRef}>
+              <HomePageTestimonials />
+            </div>
           </div>
 
           <div className="py-4 flex flex-col gap-4">
             <div className="flex justify-center">
-              <HomePageBadge>{t('features.badge')}</HomePageBadge>
+              <Badge>{t('features.badge')}</Badge>
             </div>
 
             <h2 className="text-2xl mx-6 text-center text-black font-medium">
               {t('features.title.prefix')}{' '}
-              <strong className="font-medium text-primary">{t('features.title.highlight')}</strong>{' '}
+              <strong className="font-medium text-primary font-dm-sans">
+                {t('features.title.highlight')}
+              </strong>{' '}
               {t('features.title.suffix')}
             </h2>
 

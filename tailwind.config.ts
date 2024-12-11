@@ -12,7 +12,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         'hanken-grotesk': ['var(--font-hanken-grotesk)'],
-        lora: ['var(--font-lora)'],
+        'dm-sans': ['var(--font-dm-sans)'],
       },
       boxShadow: {
         plain: '-4px 4px 0 0 black',
