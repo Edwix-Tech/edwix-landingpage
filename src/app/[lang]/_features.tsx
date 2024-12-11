@@ -16,9 +16,9 @@ export function HomePageFeatures() {
   const t = useTranslations('landing');
   const features: FeatureItem[] = [
     {
-      icon: <DollarSign />,
-      title: t('features.expenseTracker.title'),
-      description: t('features.expenseTracker.description'),
+      icon: <Calendar />,
+      title: t('features.calendar.title'),
+      description: t('features.calendar.description'),
     },
     {
       icon: <Bell />,
@@ -31,14 +31,14 @@ export function HomePageFeatures() {
       description: t('features.goEmail.description'),
     },
     {
+      icon: <DollarSign />,
+      title: t('features.expenseTracker.title'),
+      description: t('features.expenseTracker.description'),
+    },
+    {
       icon: <Lock />,
       title: t('features.vault.title'),
       description: t('features.vault.description'),
-    },
-    {
-      icon: <Calendar />,
-      title: t('features.calendar.title'),
-      description: t('features.calendar.description'),
     },
   ];
 

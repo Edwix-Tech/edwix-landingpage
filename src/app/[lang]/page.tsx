@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { HomePageForm } from './_form';
 import { HomePageTestimonials } from './_testimonials';
 import { HomePageFeatures } from './_features';
+import { useParams } from 'next/navigation';
 
 function Badge(opts: { children: React.ReactNode; className?: string }) {
   return (
@@ -124,6 +125,7 @@ function FiveStars() {
 }
 
 export default function HomePage() {
+  const params = useParams();
   const t = useTranslations('landing');
   const formContainerRef = React.useRef<HTMLDivElement>(null);
   const testimonialsContainerRef = React.useRef<HTMLDivElement>(null);
@@ -140,6 +142,8 @@ export default function HomePage() {
     }
   };
 
+  console.log(params);
+
   return (
     <main className="flex flex-col items-center min-h-screen container max-w-screen-sm mx-auto">
       <div
@@ -151,6 +155,16 @@ export default function HomePage() {
       <div className="w-full">
         <div className="relative flex flex-col items-center pt-4">
           <Sparkles />
+
+          {params.lang === 'en' ? (
+            <a href="/fr" className="absolute top-0 right-0 text-sm p-2 font-bold z-20">
+              FR
+            </a>
+          ) : params.lang === 'fr' ? (
+            <a href="/en" className="absolute top-0 right-0 text-sm p-2 font-bold z-20">
+              EN
+            </a>
+          ) : null}
 
           <div className="relative z-10 flex flex-col items-center gap-6">
             <div className="flex justify-center my-4">

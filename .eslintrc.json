@@ -3,7 +3,8 @@
   "rules": {
     "react-hooks/exhaustive-deps": "off",
     "typescript-eslint/no-empty-object-type": "off",
-    "@typescript-eslint/no-empty-object-type": "off"
+    "@typescript-eslint/no-empty-object-type": "off",
+    "@next/next/no-html-link-for-pages": "off"
   },
   "ignorePatterns": ["src/components/ui/*", "src/hooks/use-toast.ts"]
 }

@@ -103,17 +103,17 @@
         "description": "Sécurisez vos documents sur un serveur cloud"
       },
       "calendar": {
-        "title": "Synchronisation calendrier",
-        "description": "Synchronisez vos échéances avec votre calendrier personnel"
+        "title": "Apple & Google Integration",
+        "description": "Synchronisez votre calendrier et votre boîte de réception"
       }
     },
     "testimonials": {
       "nathalie": {
-        "quote": "La fonction GoEmail a sauvé ma boîte de réception d'être surchargée et a aussi organisé mes factures sous un même toit",
+        "quote": "La fonction **GoEmail** a sauvé ma boîte de réception d'être surchargée et a aussi organisé mes factures sous un même toit",
         "explanation": "GoEmail est l'une des fonctionnalités principales d'Edwix, contournant votre boîte de réception et synchronisant automatiquement toutes vos factures dans Edwix !"
       },
       "christian": {
-        "quote": "J'ai découvert que je payais trop d'électricité grâce au suivi des dépenses, et j'ai trouvé des problèmes électriques qui auraient pu être coûteux s'ils n'avaient pas été réparés",
+        "quote": "J'ai découvert que je payais trop d'électricité grâce au **suivi des dépenses**, et j'ai trouvé des problèmes électriques qui auraient pu être coûteux s'ils n'avaient pas été réparés",
         "explanation": "Le suivi des dépenses est un outil complet pour catégoriser, suivre vos différentes dépenses et vous notifier de tout changement."
       },
       "userSince": "Utilisateur depuis {date}"

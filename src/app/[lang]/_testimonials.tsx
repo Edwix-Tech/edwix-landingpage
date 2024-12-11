@@ -40,8 +40,6 @@ export function HomePageTestimonials() {
     <Swiper
       modules={[Pagination]}
       slidesPerView="auto"
-      onSlideChange={() => console.log('slide change')}
-      onSwiper={swiper => console.log(swiper)}
       pagination={{ clickable: true }}
       className="w-full overflow-hidden"
       centeredSlides
@@ -66,10 +64,16 @@ export function HomePageTestimonials() {
                 </p>
               </div>
             </div>
-            <p className="text-xl text-center font-medium">
-              &ldquo;{`  ${testimonial.quote}  `}&rdquo;
-            </p>
-            <p className="text-xs text-muted-foreground">*{testimonial.explanation}</p>
+            <p
+              className="text-xl text-center font-medium"
+              dangerouslySetInnerHTML={{
+                __html: `&ldquo;  ${testimonial.quote.replace(
+                  /\*\*([^*]+)\*\*/g,
+                  '<strong class="text-primary">$1</strong>'
+                )}  &rdquo;`,
+              }}
+            ></p>
+            <p className="text-xs text-muted-foreground">{testimonial.explanation}</p>
           </Card>
         </SwiperSlide>
       ))}
