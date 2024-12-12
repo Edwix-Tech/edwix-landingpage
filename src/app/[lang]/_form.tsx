@@ -28,6 +28,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { useMutation } from '@tanstack/react-query';
+import { useParams } from 'next/navigation';
 
 const formSchema = (t: (key: string) => string) =>
   z.object({
@@ -83,6 +84,7 @@ function PasswordRequirements({
 }
 
 export function HomePageForm() {
+  const params = useParams();
   const { toast } = useToast();
   const t = useTranslations('landing');
   const form = useForm<FormValues>({
@@ -102,7 +104,7 @@ export function HomePageForm() {
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
   const registerMutation = useMutation({
-    mutationFn: (data: RegisterPayload) => register(data),
+    mutationFn: (data: RegisterPayload) => register({ ...data, locale: String(params.lang) }),
     onSuccess: () => {
       setShowConfirmation(true);
       form.reset();
@@ -126,7 +128,7 @@ export function HomePageForm() {
       return;
     }
 
-    registerMutation.mutate(data);
+    registerMutation.mutate({ ...data, locale: String(params.lang) });
   };
 
   const renderFieldText = (opts: {

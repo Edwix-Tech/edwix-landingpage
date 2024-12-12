@@ -6,6 +6,7 @@ export interface RegisterPayload {
   email: string;
   password: string;
   promoCode: string;
+  locale: string;
 }
 
 export interface RegisterResponse {
@@ -26,6 +27,7 @@ export const register = async (data: RegisterPayload): Promise<RegisterResponse>
       password: data.password,
       stripe_promo_code: data.promoCode,
       validate_promo_code: true,
+      locale: data.locale,
     }),
   });
 

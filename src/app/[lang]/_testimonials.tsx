@@ -46,7 +46,7 @@ export function HomePageTestimonials() {
     >
       {testimonials.map(testimonial => (
         <SwiperSlide key={testimonial.name} className="px-4 pb-8 w-full max-w-md">
-          <Card className="flex flex-col gap-4 p-6 py-10 border border-black">
+          <Card className="flex flex-col gap-4 p-6 py-10 border border-black h-full">
             <div className="flex flex-col gap-2 items-center">
               <Image
                 src={testimonial.imagePath}

@@ -90,3 +90,7 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.swiper-slide {
+  height: auto !important;
+}

@@ -40,7 +40,7 @@
     },
     "users": {
       "prefix": "Thousands",
-      "content": "of users chose Edwix to manage their homes"
+      "content": "of users choose Edwix to manage their homes"
     },
     "form": {
       "badge": "You are eligible to get one free year",
@@ -113,7 +113,7 @@
         "explanation": "GoEmail is a dedicated email for your property documents, skipping your personal inbox and synchronizing all your bills in Edwix, automatically!"
       },
       "christian": {
-        "quote": "I learned that I was paying too much electricity with the **expense tracker**, found out I had electrical problems that could've been costly if unfixed",
+        "quote": "I learned that I was paying too much for electricity with the **expense tracker**, found out I had electrical problems that could've been costly if unfixed",
         "explanation": "The Expense Tracker is one of the core features of Edwix, consolidating your expenses into one view just by uploading your invoices and receipts"
       },
       "userSince": "User since {date}"
