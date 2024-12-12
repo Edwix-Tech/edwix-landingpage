@@ -25,6 +25,7 @@ export const register = async (data: RegisterPayload): Promise<RegisterResponse>
       email: data.email,
       password: data.password,
       stripe_promo_code: data.promoCode,
+      validate_promo_code: true,
     }),
   });
 

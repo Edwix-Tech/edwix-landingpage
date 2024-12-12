@@ -142,8 +142,6 @@ export default function HomePage() {
     }
   };
 
-  console.log(params);
-
   return (
     <main className="flex flex-col items-center min-h-screen container max-w-screen-sm mx-auto">
       <div
